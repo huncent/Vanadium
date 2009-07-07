@@ -1,0 +1,36 @@
+is_empty  - checks if a field is empty
+
+required  - checks if a field is not empty
+
+number  - checks if a field contains number
+
+digits  - checks if a field contains digits
+
+alpha  - checks if a field is made of alphabetic characters only
+
+asciialpha  - checks if a field is made of alphabetic characters only from ASCII range
+
+alphanum  - checks if a field is made of alpha-numeric characters only
+
+date  - checks if a field is valid date in javascript format
+
+date_au  - checks if a field is valid date in DD/MM/YYYY format
+
+email  - checks if a field is valid email address
+
+url  - checks if a field is valid url address
+
+currency_dollar  - checks if a field is dolar currency format ($100, $0.10, $.20, 100,000,000, ...)
+
+selection  - checks if a field contains any selection
+
+one_required  - checks if a field contains one selection
+
+min_length  - checks if a field value is made of at least @param characters
+
+max_length  - checks if a field value is made of at most @param characters
+
+same_as  - checks if a field's value is the same as the value in other element which ID is @param
+
+ajax  - sends value of the element on server, using asynchronous request. The result is the json response form the server
+containing message and id of the HTML element to which the message will be applied.

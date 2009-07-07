@@ -1,0 +1,4 @@
+{
+  success: false,
+  message: "The username is taken. Try different one."
+}
