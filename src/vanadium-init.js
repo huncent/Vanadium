@@ -3,6 +3,7 @@ $(document).ready(function () {
     Vanadium.each(VanadiumConfig, function(k, v) {
       Vanadium.config[k] = v;
     })
-  };
+  }
+  ;
   Vanadium.init();
 });

@@ -1,38 +1,38 @@
 /*
-=====================================================================
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions
-are met:
+ =====================================================================
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
 
-1. Redistributions of source code must retain the above
-copyright notice, this list of conditions and the following
-disclaimer.
+ 1. Redistributions of source code must retain the above
+ copyright notice, this list of conditions and the following
+ disclaimer.
 
-2. Redistributions in binary form must reproduce the above
-copyright notice, this list of conditions and the following
-disclaimer in the documentation and/or other materials provided
-with the distribution.
+ 2. Redistributions in binary form must reproduce the above
+ copyright notice, this list of conditions and the following
+ disclaimer in the documentation and/or other materials provided
+ with the distribution.
 
-3. The name of the author may not be used to endorse or promote
-products derived from this software without specific prior
-written permission.
+ 3. The name of the author may not be used to endorse or promote
+ products derived from this software without specific prior
+ written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
-OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
-DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-@author Daniel Kwiecinski <daniel.kwiecinski@lambder.com>
-@copyright 2009 Daniel Kwiecinski.
-@end
-=====================================================================
+ @author Daniel Kwiecinski <daniel.kwiecinski@lambder.com>
+ @copyright 2009 Daniel Kwiecinski.
+ @end
+ =====================================================================
 */
 
 
@@ -50,19 +50,20 @@ if ($().jquery.indexOf(Vanadium.CompatibleWithJQuery) != 0 && window.console && 
 
 Vanadium.each = $.each;
 
-Vanadium.all_elements = function(){
+Vanadium.all_elements = function() {
   return $('*');
 };
 
-Vanadium.partition = function(elements, dyscriminator){
+Vanadium.partition = function(elements, dyscriminator) {
   var left = [];
   var right = [];
-  Vanadium.each(elements, function(){
-    if(dyscriminator(this)){
+  Vanadium.each(elements, function() {
+    if (dyscriminator(this)) {
       left.push(this);
-    }else{
+    } else {
       right.push(this);
-    };
+    }
+    ;
   });
   return [left, right];
 };
@@ -252,42 +253,7 @@ Vanadium.reset = function() {
 
 //-------------------- vanadium-dom.js -----------------------------
 
-/*
- =====================================================================
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
 
- 1. Redistributions of source code must retain the above
- copyright notice, this list of conditions and the following
- disclaimer.
-
- 2. Redistributions in binary form must reproduce the above
- copyright notice, this list of conditions and the following
- disclaimer in the documentation and/or other materials provided
- with the distribution.
-
- 3. The name of the author may not be used to endorse or promote
- products derived from this software without specific prior
- written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
- OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
- DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
- @author Daniel Kwiecinski <daniel.kwiecinski@lambder.com>
- @copyright 2009 Daniel Kwiecinski.
- @end
- =====================================================================
- */
 Vanadium.extend(
 {
 
@@ -408,8 +374,10 @@ ElementValidation.prototype = {
       var milisesonds = parseInt(param);
       if (milisesonds != NaN && typeof(milisesonds) === "number") {
         this.wait = milisesonds;
-      };
-    };
+      }
+      ;
+    }
+    ;
   },
   element_containers: function() {
     if (this.containers === null) {
@@ -421,10 +389,13 @@ ElementValidation.prototype = {
           var container = Vanadium.containers[parent.id];
           container.add_element(this);
           this.containers[parent.id] = container;
-        };
+        }
+        ;
         parent = parent.parentNode;
-      };
-    };
+      }
+      ;
+    }
+    ;
     return this.containers;
   },
   // context - the contect in which decoration_callback should be invoked
@@ -454,7 +425,8 @@ ElementValidation.prototype = {
       Vanadium.addValidationClass(this.element, true);
     } else {
       this.invalid = undefined; //mark this validation element as undefined
-    };
+    }
+    ;
     // add apropirate CSS class to the validated element's containers
     Vanadium.each(this.element_containers(), function() {
       this.decorate();
@@ -469,14 +441,17 @@ ElementValidation.prototype = {
           if (advice_is_empty || $(advice).hasClass(Vanadium.empty_advice_marker_class)) {
             $(advice).addClass(Vanadium.empty_advice_marker_class);
             $(advice).append("<span>" + validation_result.message + "</span>");
-          };
+          }
+          ;
           $(advice).show();
         } else {
           advice = self.create_advice(validation_result);
-        };
+        }
+        ;
       } else {
         advice = self.create_advice(validation_result);
-      };
+      }
+      ;
       Vanadium.addValidationClass(advice, false);
     });
   },
@@ -507,16 +482,19 @@ ElementValidation.prototype = {
       if (advice) {
         if ($(advice).hasClass(Vanadium.empty_advice_marker_class)) {
           $(advice).empty();
-        };
+        }
+        ;
         $(advice).hide();
-      };
+      }
+      ;
     });
 
     var created_advice = this.created_advices.pop();
     while (!(created_advice === undefined)) {
       $(created_advice).remove();
       created_advice = this.created_advices.pop();
-    };
+    }
+    ;
     Vanadium.removeValidationClass(this.element);
   },
   //
@@ -547,14 +525,15 @@ ElementValidation.prototype = {
         delegate.apply(self, arguments);
         if (oryg) {
           return oryg.apply(self.element, arguments);
-        };
+        }
+        ;
       };
     };
 
     //TODO forms !!!
 
     //proxy('onfocus', function() {
-      //TODO make doONFocus self.doOnFocus(e);
+    //TODO make doONFocus self.doOnFocus(e);
     //});
     if (!this.only_on_submit) {
       switch (this.elementType) {
@@ -575,63 +554,32 @@ ElementValidation.prototype = {
           proxy('onkeydown', function(e) {
             if (e.keyCode != 9) {
               this.reset();
-            };
+            }
+            ;
           });
 
           if (!this.only_on_blur) {
             proxy('onkeyup', function(e) {
               if (e.keyCode != 9) {
                 this.deferValidation();
-              };
+              }
+              ;
             });
           };
 
           proxy('onblur', function() {
             this.validateAndDecorate();
           });
-      };
-    };
+      }
+      ;
+    }
+    ;
   }
 };
 
 //-------------------- vanadium-instance.js -----------------------------
 
-/*
- =====================================================================
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
 
- 1. Redistributions of source code must retain the above
- copyright notice, this list of conditions and the following
- disclaimer.
-
- 2. Redistributions in binary form must reproduce the above
- copyright notice, this list of conditions and the following
- disclaimer in the documentation and/or other materials provided
- with the distribution.
-
- 3. The name of the author may not be used to endorse or promote
- products derived from this software without specific prior
- written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
- OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
- DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
- @author Daniel Kwiecinski <daniel.kwiecinski@lambder.com>
- @copyright 2009 Daniel Kwiecinski.
- @end
- =====================================================================
- */
 Validation = function(element, validation_type, param, advice_id) {
   this.initialize(element, validation_type, param, advice_id)
 }
@@ -707,8 +655,8 @@ Vanadium.Type.prototype = {
   invalidMessage: function() {
     return this.error_message;
   },
-  toString: function(){
-    return "className:"+this.className+" message:"+this.message+" error_message:"+this.error_message
+  toString: function() {
+    return "className:" + this.className + " message:" + this.message + " error_message:" + this.error_message
   }
 };
 
@@ -791,7 +739,8 @@ Vanadium.setupValidatorTypes = function() {
           return true
         } else {
           return v.length >= parseInt(p)
-        };
+        }
+        ;
       },
       function (_v, p) {
         return 'The value should be at least <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
@@ -803,7 +752,8 @@ Vanadium.setupValidatorTypes = function() {
           return true
         } else {
           return v.length <= parseInt(p)
-        };
+        }
+        ;
       },
       function (_v, p) {
         return 'The value should be at most <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
@@ -819,7 +769,8 @@ Vanadium.setupValidatorTypes = function() {
             return v == exemplar.value;
           else
             return false;
-        };
+        }
+        ;
       },
       function (_v, p) {
         var exemplar = document.getElementById(p);
@@ -839,7 +790,7 @@ Vanadium.setupValidatorTypes = function() {
       }]
   ])
 
-  if(VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
+  if (VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
 };
 
 
@@ -852,6 +803,7 @@ $(document).ready(function () {
     Vanadium.each(VanadiumConfig, function(k, v) {
       Vanadium.config[k] = v;
     })
-  };
+  }
+  ;
   Vanadium.init();
 });

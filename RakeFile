@@ -58,7 +58,7 @@ task :build => :clean do
     SOURCE_LIST.each do |src|
       File.open(src) do |f|
         vanadium << "\n\n//-------------------- #{File.basename(src)} -----------------------------\n\n"
-        vanadium << f.read.sub("/*\n"+license+"\n*/", '')
+        vanadium << f.read.sub("/*\n"+license+"\n */", '')
       end
     end
   end
