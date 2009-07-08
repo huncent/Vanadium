@@ -60,7 +60,8 @@ Vanadium.config = {
   message_value_class: '-v-message-value',
   advice_class: '-v-advice',
   prefix: ':',
-  separator: ';'
+  separator: ';',
+  reset_defer_timeout: 100
 }
 
 Vanadium.empty_advice_marker_class = '-vanadium-empty-advice-'

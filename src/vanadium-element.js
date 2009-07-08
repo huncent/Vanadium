@@ -203,6 +203,13 @@ ElementValidation.prototype = {
       self.validateAndDecorate();
     }, self.wait);
   },
+  deferReset: function() {  
+    var self = this;
+    if (self.reset_timeout) clearTimeout(self.reset_timeout);
+    self.reset_timeout = setTimeout(function() {
+      self.reset();
+    }, Vanadium.config.reset_defer_timeout);
+  },
   setup: function() {
     var self = this;
     this.elementType = Vanadium.getElementType(this.element);
@@ -245,7 +252,7 @@ ElementValidation.prototype = {
         default:
           proxy('onkeydown', function(e) {
             if (e.keyCode != 9) {
-              this.reset();
+              this.deferReset();
             }
             ;
           });
