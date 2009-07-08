@@ -75,7 +75,7 @@ Vanadium.partition = function(elements, dyscriminator){
 
 ContainerValidation = function(html_element) {
   this.initialize(html_element)
-};
+}
 
 ContainerValidation.prototype = {
   initialize: function(html_element) {
@@ -86,61 +86,33 @@ ContainerValidation.prototype = {
     this.elements.push(element);
   },
   decorate: function() {
-    var valid = true;
-    for (id in this.elements) {
-      if (this.elements[id].invalid) {
+    var valid = null;
+    for (var id in this.elements) {
+      if (this.elements[id].invalid === undefined) {
+        valid = undefined;
+      } else if (this.elements[id].invalid === true) {
         valid = false;
         break;
-      };
-    };
-    if (valid) {
+      } else if (this.elements[id].invalid === false && valid === null) {
+        valid = true;
+      }
+    }
+    if (valid === undefined) {
+      $(this.html_element).removeClass(Vanadium.config.invalid_class);
+      $(this.html_element).removeClass(Vanadium.config.valid_class);
+    } else if (valid) {
       $(this.html_element).removeClass(Vanadium.config.invalid_class);
       $(this.html_element).addClass(Vanadium.config.valid_class);
     } else {
       $(this.html_element).removeClass(Vanadium.config.valid_class);
       $(this.html_element).addClass(Vanadium.config.invalid_class);
-    };
+    }
   }
-};
+}
 
 //-------------------- vanadium-base.js -----------------------------
 
-/*
- =====================================================================
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
 
- 1. Redistributions of source code must retain the above
- copyright notice, this list of conditions and the following
- disclaimer.
-
- 2. Redistributions in binary form must reproduce the above
- copyright notice, this list of conditions and the following
- disclaimer in the documentation and/or other materials provided
- with the distribution.
-
- 3. The name of the author may not be used to endorse or promote
- products derived from this software without specific prior
- written permission.
-
- THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
- OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
- DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
- @author Daniel Kwiecinski <daniel.kwiecinski@lambder.com>
- @copyright 2009 Daniel Kwiecinski.
- @end
- =====================================================================
- */
 Vanadium.containers = {};
 Vanadium.validators_types = {};
 Vanadium.elements_validators = {};
@@ -151,30 +123,31 @@ Vanadium.extend = function(extension) {
   for (var idx = 0; idx < arguments.length; idx++) {
     args.push(arguments[idx]);
   }
-  ;
   return $.extend.apply($, args);
-};
+}
 
 Vanadium.bind = function(fun, context) {
   return function() {
     return fun.apply(context, arguments);
-  };
-};
+  }
+}
 
 //default config
 Vanadium.config = {
   valid_class: '-v-valid',
   invalid_class: '-v-invalid',
+  message_value_class: '-v-message-value',
+  advice_class: '-v-advice',
   prefix: ':',
   separator: ';'
-};
+}
 
-Vanadium.empty_advice_marker_class = '-vanadium-empty-advice-';
+Vanadium.empty_advice_marker_class = '-vanadium-empty-advice-'
 
 Vanadium.init = function() {
   this.setupValidatorTypes();
   this.scan_dom();
-};
+}
 
 Vanadium.addValidatorType = function(className, validationFunction, message, error_message) {
   this.validators_types[className] = new Vanadium.Type(className, validationFunction, message, error_message);
@@ -185,7 +158,8 @@ Vanadium.addValidatorTypes = function(validators_args) {
   Vanadium.each(validators_args,
           function() {
             Vanadium.addValidatorType.apply(self, this);
-          });
+          }
+          )
 };
 
 
@@ -197,7 +171,7 @@ Vanadium.scan_dom = function() {
             if (Vanadium.is_input_element(child)) {
               var element_validation = new ElementValidation(child);
 
-              Vanadium.elements_validators[child.id] = element_validation;
+              Vanadium.elements_validators[child.id] = element_validation
 
               Vanadium.each(class_names,
                       function() {
@@ -208,9 +182,8 @@ Vanadium.scan_dom = function() {
             } else {
               Vanadium.add_validation_container(child);
             }
-            ;
           })
-};
+}
 
 Vanadium.add_validation_container = function(element) {
   var class_names = element.className.split(' ');
@@ -218,36 +191,32 @@ Vanadium.add_validation_container = function(element) {
           function() {
             if (this.indexOf(Vanadium.config.prefix + 'container') == 0) {
               Vanadium.containers[element.id] = new ContainerValidation(element);
-              return true;
+              return true
             }
-            ;
           });
-};
+}
 
 Vanadium.add_validation_instance = function(element_validation, class_name) {
   if (class_name.indexOf(Vanadium.config.prefix) == 0) {
     var v_params = class_name.substr(Vanadium.config.prefix.length).split(Vanadium.config.separator)
-    var v_name = v_params[0];
-    var v_param = (v_params[1] === "" ? undefined : v_params[1]);
-    var v_advice_id = v_params[2];
-    var validator_type = Vanadium.validators_types[v_name];
+    var v_name = v_params[0]
+    var v_param = (v_params[1] === "" ? undefined : v_params[1])
+    var v_advice_id = v_params[2]
+    var validator_type = Vanadium.validators_types[v_name]
     if (validator_type) {
       element_validation.add_validation_instance(validator_type, v_param, v_advice_id);
     }
-    ;
   }
-  ;
-};
+}
 
 Vanadium.add_validation_modifier = function(element_validation, class_name) {
   if (class_name == Vanadium.config.prefix + 'only_on_blur' || class_name == Vanadium.config.prefix + 'only_on_submit' || class_name.indexOf(Vanadium.config.prefix + 'wait') == 0) {
-    var v_params = class_name.substr(Vanadium.config.prefix.length).split(Vanadium.config.separator);
-    var v_name = v_params[0];
-    var v_param = v_params[1];
+    var v_params = class_name.substr(Vanadium.config.prefix.length).split(Vanadium.config.separator)
+    var v_name = v_params[0]
+    var v_param = v_params[1]
     element_validation.add_validation_modifier(v_name, v_param);
   }
-  ;
-};
+}
 
 Vanadium.validate = function() {
   var validation = {};
@@ -257,25 +226,24 @@ Vanadium.validate = function() {
 
           });
   return validation;
-};
+}
 
 Vanadium.decorate = function(validation_results) {
   if (arguments.length == 0) {
     validation_results = this.validate();
   }
-  ;
   Vanadium.each(validation_results,
           function(element_id, element_validation_results) {
             Vanadium.elements_validators[element_id].decorate(element_validation_results);
           });
-};
+}
 
 Vanadium.reset = function() {
   Vanadium.each(this.elements_validators,
           function() {
             this.reset();
           });
-};
+}
 
 
 
@@ -413,8 +381,6 @@ ElementValidation = function(element) {
 };
 ElementValidation.prototype = {
 
-
-
   initialize: function(element) {
     this.element = element;
     this.validations = [];
@@ -424,7 +390,7 @@ ElementValidation.prototype = {
     this.created_advices = [];
     this.decorated = false;
     this.containers = null;
-    this.invalid = false;
+    this.invalid = undefined;
   },
 
   add_validation_instance: function(validator_type, param, advice_id) {
@@ -483,9 +449,11 @@ ElementValidation.prototype = {
     if (failed.length > 0) {
       this.invalid = true; //mark this validation element as invalid
       Vanadium.addValidationClass(this.element, false);
-
     } else if (passed.length > 0) {
+      this.invalid = false; //mark this validation element as valid
       Vanadium.addValidationClass(this.element, true);
+    } else {
+      this.invalid = undefined; //mark this validation element as undefined
     };
     // add apropirate CSS class to the validated element's containers
     Vanadium.each(this.element_containers(), function() {
@@ -524,12 +492,16 @@ ElementValidation.prototype = {
   create_advice: function(validation_result) {
     var span = document.createElement("span");
     this.created_advices.push(span);
+    $(span).addClass(Vanadium.config.advice_class);
     $(span).html(validation_result.message);
     $(this.element).after(span);
     return span;
   },
   reset: function() {
-    this.invalid = false;
+    this.invalid = undefined; //mark this validation element as undefined
+    Vanadium.each(this.element_containers(), function() {
+      this.decorate();
+    });
     Vanadium.each(this.validations, function() {
       var advice = document.getElementById(this.adviceId);
       if (advice) {
@@ -566,6 +538,8 @@ ElementValidation.prototype = {
     this.elementType = Vanadium.getElementType(this.element);
 
     this.form = this.element.form;
+
+    this.element_containers();
 
     var proxy = function(oryg_name, delegate) {
       var oryg = self.element[oryg_name];
@@ -622,10 +596,45 @@ ElementValidation.prototype = {
 
 //-------------------- vanadium-instance.js -----------------------------
 
+/*
+ =====================================================================
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
 
+ 1. Redistributions of source code must retain the above
+ copyright notice, this list of conditions and the following
+ disclaimer.
+
+ 2. Redistributions in binary form must reproduce the above
+ copyright notice, this list of conditions and the following
+ disclaimer in the documentation and/or other materials provided
+ with the distribution.
+
+ 3. The name of the author may not be used to endorse or promote
+ products derived from this software without specific prior
+ written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ @author Daniel Kwiecinski <daniel.kwiecinski@lambder.com>
+ @copyright 2009 Daniel Kwiecinski.
+ @end
+ =====================================================================
+ */
 Validation = function(element, validation_type, param, advice_id) {
-  this.initialize(element, validation_type, param, advice_id);
-};
+  this.initialize(element, validation_type, param, advice_id)
+}
 
 Validation.prototype = {
   initialize: function(element, validation_type, param, advice_id) {
@@ -633,14 +642,18 @@ Validation.prototype = {
     this.validation_type = validation_type;
     this.param = param;
     //
-    this.adviceId = advice_id
+    this.adviceId = advice_id;
+    var advice = document.getElementById(advice_id);
+    if (advice) {
+      $(advice).addClass(Vanadium.config.advice_class);
+    }
   },
   emmit_message: function(message) {
     if (typeof(message) === "string") {
       return message;
     } else if (typeof(message) === "function") {
       return message.call(this, this.element.value, this.param);
-    };
+    }
   },
   validMessage: function() {
     return this.emmit_message(this.validation_type.validMessage()) || 'ok'
@@ -657,20 +670,20 @@ Validation.prototype = {
     var return_value = {
       success: false,
       message: "Received invalid return value."
-    };
+    }
     var validation_result = this.test(decoration_context, decoration_callback);
     if (typeof validation_result === "boolean") {
       return {
         success: validation_result,
         advice_id: this.adviceId,
         message: (validation_result ? this.validMessage() : this.invalidMessage())
-      };
+      }
     } else if (typeof validation_result === "object") {
       $.extend.apply(return_value, validation_result);
-    };
+    }
     return return_value;
   }
-};
+}
 
 //-------------------- vanadium-types.js -----------------------------
 
@@ -781,7 +794,7 @@ Vanadium.setupValidatorTypes = function() {
         };
       },
       function (_v, p) {
-        return 'The value should be at least ' + p + ' characters long.'
+        return 'The value should be at least <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
       }
     ],
     ['max_length',
@@ -793,7 +806,7 @@ Vanadium.setupValidatorTypes = function() {
         };
       },
       function (_v, p) {
-        return 'The value should be at most ' + p + ' characters long.'
+        return 'The value should be at most <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
       }
     ],
     ['same_as',

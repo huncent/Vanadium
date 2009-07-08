@@ -9,25 +9,50 @@
   <script src="src/config.js" type="text/javascript"></script>
   <script src="src/custom-types.js" type="text/javascript"></script>
 
-  <script src="dist/vanadium.js" type="text/javascript"></script>
+  <!--<script src="dist/vanadium.js" type="text/javascript"></script>-->
+  <script src='src/vanadium-jquery.js' type='text/javascript'></script>
+  <script src='src/vanadium-container.js' type='text/javascript'></script>
+  <script src='src/vanadium-base.js' type='text/javascript'></script>
+  <script src='src/vanadium-dom.js' type='text/javascript'></script>
+  <script src='src/vanadium-element.js' type='text/javascript'></script>
+  <script src='src/vanadium-instance.js' type='text/javascript'></script>
+  <script src='src/vanadium-types.js' type='text/javascript'></script>
+  <script src='src/vanadium-init.js' type='text/javascript'></script>
+
 
   <style type="text/css">
-    div {
+    * {
       margin: 10px;
     }
-    .vanadium-invalid {
-      border-color: #F00;
-      border-style: solid; 
-      background: #f77;
+
+    div.vanadium-invalid {
+      border-color: #F00 !important;
+      border-style: solid !important;
     }
 
-    .vanadium-valid {
-      border-color: #0F0;
-      background: #7F7;
+    div.vanadium-valid {
+      border-color: #0F0 !important;
+      border-style: solid !important;
     }
 
     .vanadium-message-value {
       font-style: italic;
+      text-decoration:underline;
+    }
+
+    .vanadium-advice.vanadium-invalid, .vanadium-advice.vanadium-invalid * {
+      color: #F00;
+    }
+
+    div {
+      margin: 10px;
+      padding: 10px;
+      border-color: #00F;
+      border-style: solid;
+    }
+
+    input.vanadium-valid {
+      background-color: greenyellow;
     }
   </style>
 </head>
@@ -51,12 +76,12 @@
   </div>
   <div id="passwords" class=":container">
     <label class="desc" for="pass">password: </label>
-    <input name="password" id="pass" type="password" class=":required :min_length;5 :wait;500">
+    <input name="password" id="pass" type="password" class=":required :min_length;5 :wait;200">
     <br/>
 
     <label class="desc" for="repeat_pass">repeat password: </label>
     <input id="repeat_pass" type="password"
-           class=":required;global-advice :min_length;5;global-advice :same_as;pass;global-advice :wait;500">
+           class=":required;global-advice :min_length;5;global-advice :same_as;pass;global-advice :wait;200">
     <br/>
   </div>
 

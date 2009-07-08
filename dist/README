@@ -5,8 +5,8 @@ Ajax Enabled, Server-side Aware, Client-side Validation
 Version: 0.1
 Author: Daniel Kwiecinski Webb (daniel.kwieicnski@lambder.com)
 Project Home: http://lambder.com
-GIT repo: http://svn.danwebb.net/external/lowpro/
-Licence: MIT
+GIT repo: http://github.com/lambder/Vanadium
+
 
 Vanadium is JavaScript validation toolkit that makes client-side validation easy.
 Here's a rundown of the functionality:

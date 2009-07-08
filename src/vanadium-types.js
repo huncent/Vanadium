@@ -140,7 +140,7 @@ Vanadium.setupValidatorTypes = function() {
         };
       },
       function (_v, p) {
-        return 'The value should be at least ' + p + ' characters long.'
+        return 'The value should be at least <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
       }
     ],
     ['max_length',
@@ -152,7 +152,7 @@ Vanadium.setupValidatorTypes = function() {
         };
       },
       function (_v, p) {
-        return 'The value should be at most ' + p + ' characters long.'
+        return 'The value should be at most <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
       }
     ],
     ['same_as',

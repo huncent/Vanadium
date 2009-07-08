@@ -39,8 +39,6 @@ ElementValidation = function(element) {
 };
 ElementValidation.prototype = {
 
-
-
   initialize: function(element) {
     this.element = element;
     this.validations = [];
@@ -50,7 +48,7 @@ ElementValidation.prototype = {
     this.created_advices = [];
     this.decorated = false;
     this.containers = null;
-    this.invalid = false;
+    this.invalid = undefined;
   },
 
   add_validation_instance: function(validator_type, param, advice_id) {
@@ -109,9 +107,11 @@ ElementValidation.prototype = {
     if (failed.length > 0) {
       this.invalid = true; //mark this validation element as invalid
       Vanadium.addValidationClass(this.element, false);
-
     } else if (passed.length > 0) {
+      this.invalid = false; //mark this validation element as valid
       Vanadium.addValidationClass(this.element, true);
+    } else {
+      this.invalid = undefined; //mark this validation element as undefined
     };
     // add apropirate CSS class to the validated element's containers
     Vanadium.each(this.element_containers(), function() {
@@ -150,12 +150,16 @@ ElementValidation.prototype = {
   create_advice: function(validation_result) {
     var span = document.createElement("span");
     this.created_advices.push(span);
+    $(span).addClass(Vanadium.config.advice_class);
     $(span).html(validation_result.message);
     $(this.element).after(span);
     return span;
   },
   reset: function() {
-    this.invalid = false;
+    this.invalid = undefined; //mark this validation element as undefined
+    Vanadium.each(this.element_containers(), function() {
+      this.decorate();
+    });
     Vanadium.each(this.validations, function() {
       var advice = document.getElementById(this.adviceId);
       if (advice) {
@@ -192,6 +196,8 @@ ElementValidation.prototype = {
     this.elementType = Vanadium.getElementType(this.element);
 
     this.form = this.element.form;
+
+    this.element_containers();
 
     var proxy = function(oryg_name, delegate) {
       var oryg = self.element[oryg_name];

@@ -36,7 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 ContainerValidation = function(html_element) {
   this.initialize(html_element)
-};
+}
 
 ContainerValidation.prototype = {
   initialize: function(html_element) {
@@ -47,19 +47,26 @@ ContainerValidation.prototype = {
     this.elements.push(element);
   },
   decorate: function() {
-    var valid = true;
-    for (id in this.elements) {
-      if (this.elements[id].invalid) {
+    var valid = null;
+    for (var id in this.elements) {
+      if (this.elements[id].invalid === undefined) {
+        valid = undefined;
+      } else if (this.elements[id].invalid === true) {
         valid = false;
         break;
-      };
-    };
-    if (valid) {
+      } else if (this.elements[id].invalid === false && valid === null) {
+        valid = true;
+      }
+    }
+    if (valid === undefined) {
+      $(this.html_element).removeClass(Vanadium.config.invalid_class);
+      $(this.html_element).removeClass(Vanadium.config.valid_class);
+    } else if (valid) {
       $(this.html_element).removeClass(Vanadium.config.invalid_class);
       $(this.html_element).addClass(Vanadium.config.valid_class);
     } else {
       $(this.html_element).removeClass(Vanadium.config.valid_class);
       $(this.html_element).addClass(Vanadium.config.invalid_class);
-    };
+    }
   }
-};
+}
