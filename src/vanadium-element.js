@@ -49,6 +49,7 @@ ElementValidation.prototype = {
     this.decorated = false;
     this.containers = null;
     this.invalid = undefined;
+    this.advice_id = undefined; //this is general common advice for all validation instances having no specific advice defined
   },
 
   add_validation_instance: function(validator_type, param, advice_id) {
@@ -68,6 +69,11 @@ ElementValidation.prototype = {
         this.wait = milisesonds;
       }
       ;
+    } else if (modifier == 'advice') {
+      var advice = document.getElementById(param);
+      if (advice) {
+        this.advice_id = param;
+      }
     }
     ;
   },
@@ -126,8 +132,11 @@ ElementValidation.prototype = {
     //
     Vanadium.each(failed, function(className, validation_result) {
       var advice = undefined;
-      if (validation_result.advice_id) {
-        advice = document.getElementById(validation_result.advice_id);
+      if (this.advice_id) {
+        advice = document.getElementById(this.advice_id);
+      }
+      if (advice || validation_result.advice_id) {
+        advice = advice || document.getElementById(validation_result.advice_id);
         if (advice) {
           var advice_is_empty = advice.childNodes.length == 0
           if (advice_is_empty || $(advice).hasClass(Vanadium.empty_advice_marker_class)) {
@@ -203,7 +212,7 @@ ElementValidation.prototype = {
       self.validateAndDecorate();
     }, self.wait);
   },
-  deferReset: function() {  
+  deferReset: function() {
     var self = this;
     if (self.reset_timeout) clearTimeout(self.reset_timeout);
     self.reset_timeout = setTimeout(function() {
