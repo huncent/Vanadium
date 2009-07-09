@@ -132,12 +132,13 @@ ElementValidation.prototype = {
     //
     Vanadium.each(failed, function(className, validation_result) {
       var advice = undefined;
-      if (this.advice_id) {
-        advice = document.getElementById(this.advice_id);
+      if (self.advice_id) {
+        advice = document.getElementById(self.advice_id);
       }
       if (advice || validation_result.advice_id) {
         advice = advice || document.getElementById(validation_result.advice_id);
         if (advice) {
+          $(advice).addClass(Vanadium.config.advice_class);
           var advice_is_empty = advice.childNodes.length == 0
           if (advice_is_empty || $(advice).hasClass(Vanadium.empty_advice_marker_class)) {
             $(advice).addClass(Vanadium.empty_advice_marker_class);
@@ -178,13 +179,19 @@ ElementValidation.prototype = {
     Vanadium.each(this.element_containers(), function() {
       this.decorate();
     });
+    var element_advice = document.getElementById(this.advice_id);
+    if (element_advice) {
+      if ($(element_advice).hasClass(Vanadium.empty_advice_marker_class)) {
+        $(element_advice).empty();
+      }
+      $(element_advice).hide();
+    }
     Vanadium.each(this.validations, function() {
       var advice = document.getElementById(this.adviceId);
       if (advice) {
         if ($(advice).hasClass(Vanadium.empty_advice_marker_class)) {
           $(advice).empty();
         }
-        ;
         $(advice).hide();
       }
       ;
