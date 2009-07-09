@@ -34,7 +34,8 @@
  @end
  =====================================================================
  */
-Vanadium.containers = {};
+
+
 Vanadium.validators_types = {};
 Vanadium.elements_validators = {};
 Vanadium.created_advices = [];
@@ -59,12 +60,13 @@ Vanadium.bind = function(fun, context) {
   }
 }
 
+
 //default config
 Vanadium.config = {
-  valid_class: '-v-valid',
-  invalid_class: '-v-invalid',
-  message_value_class: '-v-message-value',
-  advice_class: '-v-advice',
+  valid_class: 'vanadium-valid',
+  invalid_class: 'vanadium-invalid',
+  message_value_class: 'vanadium-message-value',
+  advice_class: 'vanadium-advice',
   prefix: ':',
   separator: ';',
   reset_defer_timeout: 100
@@ -138,7 +140,7 @@ Vanadium.add_validation_container = function(element) {
           function() {
             var parameters = Vanadium.parse_class_name(this);
             if (parameters[0] == 'container') {
-              Vanadium.containers[element.id] = new ContainerValidation(element);
+              Vanadium.containers.put(element, new ContainerValidation(element));
               return true
             }
           });
@@ -146,7 +148,7 @@ Vanadium.add_validation_container = function(element) {
           function() {
             var rule = this;
             if (rule == 'container') {
-              Vanadium.containers[element.id] = new ContainerValidation(element);
+              Vanadium.containers.put(element, new ContainerValidation(element));
               return true
             }
           });

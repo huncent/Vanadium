@@ -36,6 +36,120 @@
 */
 
 
+//-------------------- vanadium-hashmap.js -----------------------------
+
+
+var HashMap = function() {
+  this.initialize();
+}
+
+HashMap.prototype = {
+  hashkey_prefix: "<#HashMapHashkeyPerfix>",
+  hashcode_field: "<#HashMapHashcodeField>",
+
+  initialize: function() {
+    this.backing_hash = {};
+    this.code = 0;
+  },
+  /*
+   maps value to key returning previous assocciation
+   */
+  put: function(key, value) {
+    var prev;
+    if (key && value) {
+      var hashCode = key[this.hashcode_field];
+      if (hashCode) {
+        prev = this.backing_hash[hashCode];
+      } else {
+        this.code += 1;
+        hashCode = this.hashkey_prefix + this.code;
+        key[this.hashcode_field] = hashCode;
+      }
+      this.backing_hash[hashCode] = value;
+    }
+    return prev;
+  },
+  /*
+   returns value associated with given key
+   */
+  get: function(key) {
+    var value;
+    if (key) {
+      var hashCode = key[this.hashcode_field];
+      if (hashCode) {
+        value = this.backing_hash[hashCode];
+      }
+    }
+    return value;
+  },
+  /*
+   deletes association by given key.
+   Returns true if the assocciation existed, false otherwise
+   */
+  del: function(key) {
+    var success = false;
+    if (key) {
+      var hashCode = key[this.hashcode_field];
+      if (hashCode) {
+        var prev = this.backing_hash[hashCode];
+        this.backing_hash[hashCode] = undefined;
+        if(prev !== undefined)
+          success = true;
+      }
+    }
+    return success;
+  }
+}
+
+//// Usage
+
+// creation
+
+var my_map = new HashMap();
+
+// insertion
+
+var a_key = {};
+var a_value = {struct: "structA"};
+var b_key = {};
+var b_value = {struct: "structB"};
+var c_key = {};
+var c_value = {struct: "structC"};
+
+my_map.put(a_key, a_value);
+my_map.put(b_key, b_value);
+var prev_b = my_map.put(b_key, c_value);
+
+// retrieval
+
+if(my_map.get(a_key) !== a_value){
+  throw("fail1")
+}
+if(my_map.get(b_key) !== c_value){
+  throw("fail2")
+}
+if(prev_b !== b_value){
+  throw("fail3")
+}
+
+// deletion
+
+var a_existed = my_map.del(a_key);
+var c_existed = my_map.del(c_key);
+var a2_existed = my_map.del(a_key);
+
+if(a_existed !== true){
+  throw("fail4")
+}
+if(c_existed !== false){
+  throw("fail5")
+}
+if(a2_existed !== false){
+  throw("fail6")
+}
+
+
+
 //-------------------- vanadium-jquery.js -----------------------------
 
 
@@ -74,7 +188,9 @@ Vanadium.partition = function(elements, dyscriminator) {
 //-------------------- vanadium-container.js -----------------------------
 
 
-ContainerValidation = function(html_element) {
+Vanadium.containers = new HashMap();
+
+var ContainerValidation = function(html_element) {
   this.initialize(html_element)
 }
 
@@ -114,7 +230,8 @@ ContainerValidation.prototype = {
 //-------------------- vanadium-base.js -----------------------------
 
 
-Vanadium.containers = {};
+
+
 Vanadium.validators_types = {};
 Vanadium.elements_validators = {};
 Vanadium.created_advices = [];
@@ -139,12 +256,13 @@ Vanadium.bind = function(fun, context) {
   }
 }
 
+
 //default config
 Vanadium.config = {
-  valid_class: '-v-valid',
-  invalid_class: '-v-invalid',
-  message_value_class: '-v-message-value',
-  advice_class: '-v-advice',
+  valid_class: 'vanadium-valid',
+  invalid_class: 'vanadium-invalid',
+  message_value_class: 'vanadium-message-value',
+  advice_class: 'vanadium-advice',
   prefix: ':',
   separator: ';',
   reset_defer_timeout: 100
@@ -218,7 +336,7 @@ Vanadium.add_validation_container = function(element) {
           function() {
             var parameters = Vanadium.parse_class_name(this);
             if (parameters[0] == 'container') {
-              Vanadium.containers[element.id] = new ContainerValidation(element);
+              Vanadium.containers.put(element, new ContainerValidation(element));
               return true
             }
           });
@@ -226,7 +344,7 @@ Vanadium.add_validation_container = function(element) {
           function() {
             var rule = this;
             if (rule == 'container') {
-              Vanadium.containers[element.id] = new ContainerValidation(element);
+              Vanadium.containers.put(element, new ContainerValidation(element));
               return true
             }
           });
@@ -466,8 +584,8 @@ ElementValidation.prototype = {
       var parent = this.element.parentNode;
       //search up the DOM tree
       while (parent != document) {
-        if (Vanadium.containers[parent.id]) {
-          var container = Vanadium.containers[parent.id];
+        var container = Vanadium.containers.get(parent);
+        if (container) {
           container.add_element(this);
           this.containers[parent.id] = container;
         }
@@ -624,9 +742,8 @@ ElementValidation.prototype = {
         if (oryg) {
           return oryg.apply(self.element, arguments);
         }
-        ;
-      };
-    };
+      }
+    }
 
     //TODO forms !!!
 
@@ -888,7 +1005,7 @@ Vanadium.setupValidatorTypes = function() {
       }]
   ])
 
-  if (VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
+  if (typeof(VanadiumCustomValidationTypes) !== "undefined" && VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
 };
 
 

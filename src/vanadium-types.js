@@ -188,7 +188,7 @@ Vanadium.setupValidatorTypes = function() {
       }]
   ])
 
-  if (VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
+  if (typeof(VanadiumCustomValidationTypes) !== "undefined" && VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);
 };
 
 

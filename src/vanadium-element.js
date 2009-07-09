@@ -83,8 +83,8 @@ ElementValidation.prototype = {
       var parent = this.element.parentNode;
       //search up the DOM tree
       while (parent != document) {
-        if (Vanadium.containers[parent.id]) {
-          var container = Vanadium.containers[parent.id];
+        var container = Vanadium.containers.get(parent);
+        if (container) {
           container.add_element(this);
           this.containers[parent.id] = container;
         }
@@ -241,9 +241,8 @@ ElementValidation.prototype = {
         if (oryg) {
           return oryg.apply(self.element, arguments);
         }
-        ;
-      };
-    };
+      }
+    }
 
     //TODO forms !!!
 

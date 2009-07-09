@@ -34,7 +34,9 @@
  @end
  =====================================================================
  */
-ContainerValidation = function(html_element) {
+Vanadium.containers = new HashMap();
+
+var ContainerValidation = function(html_element) {
   this.initialize(html_element)
 }
 
