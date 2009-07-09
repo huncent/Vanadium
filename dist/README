@@ -18,9 +18,6 @@ E.g. adding ':ajax;/path_on_server/user_exists.json' to element's classes will c
 sent to server as request. The response is expected to be json structure in the form of:
  {success: (true/false), [message: (MESSAGE_TEXT)], [advice_id: (ID_OF_THE_HTML_ELEMENT_USED_FOR_INJECTING_THE_MESSAGE)]}
 
-* Event.onReady() - add callbacks that execute as soon as the DOM is ready (now delegates to prototypes built in support for backward compatibility).
-* Event.addBehavior() - add behaviors to elements declaratively using CSS selectors.
-* Behavior object binding - If you prefer a more OO approach to behaviors Behavior.create() will create a behavior class that you can bind to elements.
 
 Compatible with JQuery 1.3.2
 Tested in: Firefox 3.5 (PC/Mac), Safari 2 (Mac), IE 6+, Opera 9 (PC/Mac)
