@@ -31,7 +31,7 @@ DIST_LIST = file_list DIST, 'vanadium.js', 'README', 'LICENSE'
 task :default => :dist
 
 desc 'Package Vanadium for distribution.'
-task :dist => :build do
+task :dist => :minify do
   puts 'Packaging distribution...'
   FileUtils.cp Dir[DOC + '/**/*'], DIST
   
@@ -63,6 +63,11 @@ task :build => :clean do
     end
   end
 end
+
+desc 'Minifies using yuicompressor'
+task :minify => :build do
+  sh "java -jar tools/yuicompressor-2.4.2.jar -o dist/vanadium-min.js dist/vanadium.js"
+end  
 
 desc 'Copies a built version of Vanadium to test dir.'
 task :dist_to_test => :build do
