@@ -14,14 +14,14 @@ Here's a rundown of the functionality:
 * Validation rules are applied to HTML elements by adding special markup classes. E.g. adding ':required' to element's classes
 makes the element being validated against provided value
 * Instead of markup, one can use external definition provided as json structure.
-* It is Ajax enabled in that sence one can declare particular field being validated by the result of the server response.
+* It is Ajax enabled in that sense one can declare particular field being validated by the result of the server response.
 E.g. adding ':ajax;/path_on_server/user_exists.json' to element's classes will cause any change to value of that element being
 sent to server as request. The response is expected to be json structure in the form of:
  {success: (true/false), [message: (MESSAGE_TEXT)], [advice_id: (ID_OF_THE_HTML_ELEMENT_USED_FOR_INJECTING_THE_MESSAGE)]}
 
 
 To have a html form with 4 fields: username, email, password and repeated password.
-Where username is rquired and has to be at least 5 characters long and unique in the system, email is valid email addres
+Where username is required and has to be at least 5 characters long and unique in the system, email is valid email adders
 password is required and has to be at least 6 character long, repeated password has to be the same as password, then one use
 the following HTML:
 
@@ -31,7 +31,7 @@ the following HTML:
 <input id="pass" class=":required :min_length;6" type="password">
 <input id="repeat_pass" class=":same_as;pass" type="password">
 
-* The the deafult (:;) markup prefix and separator can be reconfigured.
+* The the default (:;) markup prefix and separator can be reconfigured.
 
 * :ajax;http://host.com/user_exists.json in the example is server-side validation which Vanadium uses for checking if given username
 is already taken.
