@@ -3,12 +3,12 @@
     }
 
     div.vanadium-invalid {
-      border-color: #F00 !important;
+      border-color: red !important;
       border-style: solid !important;
     }
 
     div.vanadium-valid {
-      border-color: #0F0 !important;
+      border-color: green !important;
       border-style: solid !important;
     }
 
@@ -18,13 +18,13 @@
     }
 
     .vanadium-advice.vanadium-invalid, .vanadium-advice.vanadium-invalid * {
-      color: #F00;
+      color: red;
     }
 
     div {
       margin: 10px;
       padding: 10px;
-      border-color: #00F;
+      border-color: blue;
       border-style: solid;
     }
 
@@ -39,9 +39,7 @@
     }
 
     /*TODO siblings*/
-    input.vanadium-valid
-
-    -
-    div {
-      display: block !important;
+    input.vanadium-valid ~ .vanadium-valid-advice  {
+      display: inline !important;
+      color: green;
     }
