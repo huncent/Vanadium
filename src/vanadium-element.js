@@ -99,14 +99,16 @@ ElementValidation.prototype = {
   // context - the contect in which decoration_callback should be invoked
   // decoration_callback - the decoration used by asynchronous validation
   validate: function(decoration_context, decoration_callback) {
-    var result = {};
+    var result = [];
     Vanadium.each(this.validations, function() {
-      result[this.validation_type.className] = this.validate(decoration_context, decoration_callback);
+      result.push(this.validate(decoration_context, decoration_callback));
     });
     return result;
   },
-  decorate: function(element_validation_results) {
-    this.reset();
+  decorate: function(element_validation_results, do_not_reset) {
+    if(!do_not_reset){
+      this.reset();
+    }
     this.decorated = true;
     var self = this;
     var passed_and_failed = Vanadium.partition(element_validation_results, function(validation_result) {
@@ -118,7 +120,7 @@ ElementValidation.prototype = {
     if (failed.length > 0) {
       this.invalid = true; //mark this validation element as invalid
       Vanadium.addValidationClass(this.element, false);
-    } else if (passed.length > 0) {
+    } else if (passed.length > 0 && !this.invalid) { //when valid result comes but the previous was invalid and no reset was done, the invalid flag should stay unchanged
       this.invalid = false; //mark this validation element as valid
       Vanadium.addValidationClass(this.element, true);
     } else {
@@ -130,7 +132,7 @@ ElementValidation.prototype = {
       this.decorate();
     });
     //
-    Vanadium.each(failed, function(className, validation_result) {
+    Vanadium.each(failed, function(_idx, validation_result) {
       var advice = undefined;
       if (self.advice_id) {
         advice = document.getElementById(self.advice_id);

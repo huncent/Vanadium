@@ -24,7 +24,7 @@ LP_VERSION = get_version_string
 
 
 
-SOURCE_LIST = file_list SRC, 'vanadium-hashmap.js', 'vanadium-jquery.js', 'vanadium-container.js', 'vanadium-base.js', 'vanadium-dom.js', 'vanadium-element.js', 'vanadium-instance.js', 'vanadium-types.js', 'vanadium-init.js'
+SOURCE_LIST = file_list SRC, 'vanadium-jquery.js', 'vanadium-hashmap.js', 'vanadium-container.js', 'vanadium-form.js', 'vanadium-base.js', 'vanadium-utils.js', 'vanadium-dom.js', 'vanadium-element.js', 'vanadium-instance.js', 'vanadium-types.js', 'vanadium-init.js'
 
 DIST_LIST = file_list DIST, 'vanadium.js', 'README', 'LICENSE'
 

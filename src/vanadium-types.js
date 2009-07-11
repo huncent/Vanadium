@@ -181,9 +181,11 @@ Vanadium.setupValidatorTypes = function() {
     ['ajax',
       function (v, p, validation_instance, decoration_context, decoration_callback) {
         if (Vanadium.validators_types['is_empty'].test(v)) return true;
-        $.getJSON(p, {value: v, id: validation_instance.element.id}, function(data) {
-          decoration_callback.call(decoration_context, [data]);
-        });
+        if (decoration_context && decoration_callback) {
+          $.getJSON(p, {value: v, id: validation_instance.element.id}, function(data) {
+            decoration_callback.apply(decoration_context, [[data], true]);
+          });
+        }
         return true;
       }]
   ])

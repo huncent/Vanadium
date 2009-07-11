@@ -37,28 +37,8 @@
 
 
 Vanadium.validators_types = {};
-Vanadium.elements_validators = {};
+Vanadium.elements_validators_by_id = {};
 Vanadium.created_advices = [];
-
-Vanadium.isArray = function(object) {
-  return object != null && typeof object == "object" &&
-         'splice' in object && 'join' in object;
-
-}
-
-Vanadium.extend = function(extension) {
-  var args = [Vanadium];
-  for (var idx = 0; idx < arguments.length; idx++) {
-    args.push(arguments[idx]);
-  }
-  return $.extend.apply($, args);
-}
-
-Vanadium.bind = function(fun, context) {
-  return function() {
-    return fun.apply(context, arguments);
-  }
-}
 
 
 //default config
@@ -72,12 +52,11 @@ Vanadium.config = {
   reset_defer_timeout: 100
 }
 
-//validation rules
-Vanadium.rules = {
-
-}
-
 Vanadium.empty_advice_marker_class = '-vanadium-empty-advice-'
+
+//validation rules
+Vanadium.rules = {}
+
 
 Vanadium.init = function() {
   this.setupValidatorTypes();
@@ -106,7 +85,11 @@ Vanadium.scan_dom = function() {
             if (Vanadium.is_input_element(child)) {
               var element_validation = new ElementValidation(child);
 
-              Vanadium.elements_validators[child.id] = element_validation
+              if (child.id)
+                Vanadium.elements_validators_by_id[child.id] = element_validation
+
+              VanadiumForm.add_element(element_validation);
+
               //create validation rules based on class markup
               Vanadium.each(class_names,
                       function() {
@@ -217,23 +200,30 @@ Vanadium.add_validation_modifier = function(element_validation, parameters) {
 }
 
 Vanadium.validate = function() {
-  var validation = {};
+  var validation = new HashMap();
   Vanadium.each(this.elements_validators,
           function() {
-            validation[this.element.id] = this.validate();
-
+            validation.put(this.element, this.validate());
           });
   return validation;
 }
 
 Vanadium.decorate = function(validation_results) {
-  if (arguments.length == 0) {
-    validation_results = this.validate();
+  if (typeof validation_results === "object") {
+    if (validation_results.toString() == "HashMapJS") {
+      validation_results.each(function(element, element_validation_results) {
+        element.decorate(element_validation_results);
+      })
+    } else {
+      var element_id;
+      for (element_id in validation_results) {
+        var element = Vanadium.elements_validators_by_id[element_id];
+        if (element) {
+          element.decorate(validation_results[element_id]);
+        }
+      }
+    }
   }
-  Vanadium.each(validation_results,
-          function(element_id, element_validation_results) {
-            Vanadium.elements_validators[element_id].decorate(element_validation_results);
-          });
 }
 
 Vanadium.reset = function() {

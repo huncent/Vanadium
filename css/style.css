@@ -1,0 +1,47 @@
+ * {
+      margin: 10px;
+    }
+
+    div.vanadium-invalid {
+      border-color: #F00 !important;
+      border-style: solid !important;
+    }
+
+    div.vanadium-valid {
+      border-color: #0F0 !important;
+      border-style: solid !important;
+    }
+
+    .vanadium-message-value {
+      font-style: italic;
+      text-decoration: underline;
+    }
+
+    .vanadium-advice.vanadium-invalid, .vanadium-advice.vanadium-invalid * {
+      color: #F00;
+    }
+
+    div {
+      margin: 10px;
+      padding: 10px;
+      border-color: #00F;
+      border-style: solid;
+    }
+
+    input.vanadium-valid {
+      background-color: greenyellow;
+    }
+
+    #messages {
+      height: 70px;
+      padding: 0;
+      border-color: yellow;
+    }
+
+    /*TODO siblings*/
+    input.vanadium-valid
+
+    -
+    div {
+      display: block !important;
+    }

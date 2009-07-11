@@ -1,4 +1,4 @@
 {
-  success: false,
-  message: "The username is taken. Try different one."
+  success: true,
+  message: "The username is free."
 }

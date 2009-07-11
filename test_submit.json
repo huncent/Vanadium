@@ -1,0 +1,10 @@
+{
+  validation_failed:
+  {
+    email:
+    [{
+      success: false,
+      message: "This is not vaid email."
+    }]
+  }
+}
