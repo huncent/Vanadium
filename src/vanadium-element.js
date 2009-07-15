@@ -79,14 +79,14 @@ ElementValidation.prototype = {
   },
   element_containers: function() {
     if (this.containers === null) {
-      this.containers = {};
+      this.containers = new HashMap();
       var parent = this.element.parentNode;
       //search up the DOM tree
       while (parent != document) {
         var container = Vanadium.containers.get(parent);
         if (container) {
           container.add_element(this);
-          this.containers[parent.id] = container;
+          this.containers.put(parent, container);
         }
         ;
         parent = parent.parentNode;
@@ -128,8 +128,8 @@ ElementValidation.prototype = {
     }
     ;
     // add apropirate CSS class to the validated element's containers
-    Vanadium.each(this.element_containers(), function() {
-      this.decorate();
+    this.element_containers().each(function(_element, container) {
+      container.decorate();
     });
     //
     Vanadium.each(failed, function(_idx, validation_result) {
@@ -178,9 +178,9 @@ ElementValidation.prototype = {
   },
   reset: function() {
     this.invalid = undefined; //mark this validation element as undefined
-    Vanadium.each(this.element_containers(), function() {
-      this.decorate();
-    });
+//    this.element_containers().each(function(_element, container) {
+//      container.decorate();
+//    });
     var element_advice = document.getElementById(this.advice_id);
     if (element_advice) {
       if ($(element_advice).hasClass(Vanadium.empty_advice_marker_class)) {
@@ -258,7 +258,8 @@ ElementValidation.prototype = {
         default:
           $(self.element).keydown(function(e) {
             if (e.keyCode != 9) {//no tabulation as it changes focus
-              self.deferReset();
+              //self.deferReset();
+              self.reset();
             }
             ;
           });
