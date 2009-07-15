@@ -106,7 +106,7 @@ ElementValidation.prototype = {
     return result;
   },
   decorate: function(element_validation_results, do_not_reset) {
-    if(!do_not_reset){
+    if (!do_not_reset) {
       this.reset();
     }
     this.decorated = true;
@@ -236,17 +236,6 @@ ElementValidation.prototype = {
 
     this.element_containers();
 
-    var proxy = function(oryg_name, delegate) {
-      var oryg = self.element[oryg_name];
-      self.element[oryg_name] = function() {
-        delegate.apply(self, arguments);
-        if (oryg) {
-          return oryg.apply(self.element, arguments);
-        }
-      }
-    }
-
-    //TODO forms !!!
 
     //proxy('onfocus', function() {
     //TODO make doONFocus self.doOnFocus(e);
@@ -254,37 +243,36 @@ ElementValidation.prototype = {
     if (!this.only_on_submit) {
       switch (this.elementType) {
         case Vanadium.CHECKBOX:
-          proxy('onclick', function() {
-            this.validateAndDecorate();
+          $(self.element).click(function() {
+            self.validateAndDecorate();
           });
           break;
         //TODO check if checkboxes support on-change too. and if yes handle it!
         // let it run into the next to add a change event too
         case Vanadium.SELECT:
         case Vanadium.FILE:
-          proxy('onchange', function() {
-            this.validateAndDecorate();
+          $(self.element).change(function() {
+            self.validateAndDecorate();
           });
           break;
         default:
-          proxy('onkeydown', function(e) {
-            if (e.keyCode != 9) {
-              this.deferReset();
+          $(self.element).keydown(function(e) {
+            if (e.keyCode != 9) {//no tabulation as it changes focus
+              self.deferReset();
             }
             ;
           });
 
           if (!this.only_on_blur) {
-            proxy('onkeyup', function(e) {
-              if (e.keyCode != 9) {
-                this.deferValidation();
+            $(self.element).keyup(function(e) {
+              if (e.keyCode != 9) {//no tabulation as it changes focus
+                self.deferValidation();
               }
               ;
             });
           };
-
-          proxy('onblur', function() {
-            this.validateAndDecorate();
+          $(self.element).blur(function() {
+            self.validateAndDecorate();
           });
       }
       ;
