@@ -65,9 +65,25 @@ Vanadium.setupValidatorTypes = function() {
   });
 
   Vanadium.addValidatorTypes([
+    ['equal', function(v, p) {
+      return v == p;
+    }, function (_v, p) {
+      return 'The value should be equal to <span class="' + Vanadium.config.message_value_class + '">' + p + '</span>.'
+    }],
+    //
+    ['equal_ignore_case', function(v, p) {
+      return v.toLowerCase() == p.toLowerCase();
+    }, function (_v, p) {
+      return 'The value should be equal to <span class="' + Vanadium.config.message_value_class + '">' + p + '</span>.'
+    }],
+    //
     ['required', function(v) {
       return !Vanadium.validators_types['is_empty'].test(v);
     }, 'This is a required field.'],
+    //
+    ['accept', function(v, _p, e) {
+      return e.element.checked;
+    }, 'Must be accepted!'],
     //
     ['number', function(v) {
       return Vanadium.validators_types['is_empty'].test(v) || (!isNaN(v) && !/^\s+$/.test(v));
@@ -188,6 +204,35 @@ Vanadium.setupValidatorTypes = function() {
         }
         return true;
       }]
+    ,
+    ['format',
+      function(v, p) {
+        var params = p.split('/');
+        if (params.length == 3 && params[0] == "") {
+          var pattern = params[1];
+          var attributes = params[2];
+          try
+          {
+            var exp = new RegExp(pattern, attributes);
+            return Vanadium.validators_types['is_empty'].test(v) || (exp.test(v));
+          }
+          catch(err)
+          {
+            return false
+          }
+        } else {
+          return false
+        }
+      },
+      function (_v, p) {
+        var params = p.split('/');
+        if (params.length == 3 && params[0] == "") {
+          return 'The value should match be <span class="' + Vanadium.config.message_value_class + '">' + p.toString + '</span> pattern.';
+        } else {
+          return 'provided parameter <span class="' + Vanadium.config.message_value_class + '">' + p.toString + '</span> is not valid Regexp pattern.';
+        }
+      }
+    ]
   ])
 
   if (typeof(VanadiumCustomValidationTypes) !== "undefined" && VanadiumCustomValidationTypes) Vanadium.addValidatorTypes(VanadiumCustomValidationTypes);

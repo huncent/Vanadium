@@ -34,7 +34,7 @@
  @end
  =====================================================================
  */
-Validation = function(element, validation_type, param, advice_id) {
+var Validation = function(element, validation_type, param, advice_id) {
   this.initialize(element, validation_type, param, advice_id)
 }
 
@@ -64,7 +64,7 @@ Validation.prototype = {
     return this.emmit_message(this.validation_type.invalidMessage()) || 'error'
   },
   test: function(decoration_context, decoration_callback) {
-    return this.validation_type.validationFunction.call(this, this.element.value, this.param, this, decoration_context, decoration_callback);
+    return this.validation_type.validationFunction.call(this, $(this.element).val(), this.param, this, decoration_context, decoration_callback);
   },
   // decoration_context - the contect in which decoration_callback should be invoked
   // decoration_callback - the decoration used by asynchronous validation
