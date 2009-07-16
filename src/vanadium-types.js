@@ -60,7 +60,7 @@ Vanadium.Type.prototype = {
 
 Vanadium.setupValidatorTypes = function() {
 
-  Vanadium.addValidatorType('is_empty', function(v) {
+  Vanadium.addValidatorType('empty', function(v) {
     return  ((v == null) || (v.length == 0));
   });
 
@@ -78,49 +78,59 @@ Vanadium.setupValidatorTypes = function() {
     }],
     //
     ['required', function(v) {
-      return !Vanadium.validators_types['is_empty'].test(v);
+      return !Vanadium.validators_types['empty'].test(v);
     }, 'This is a required field.'],
     //
     ['accept', function(v, _p, e) {
       return e.element.checked;
     }, 'Must be accepted!'],
     //
+    ['integer', function(v) {
+      if (Vanadium.validators_types['empty'].test(v)) return true;
+      var f = parseFloat(v);
+      return (!isNaN(f) && f.toString == v && Math.round(f) == f);
+    }, 'Please enter a valid integer in this field.'],
+    //
     ['number', function(v) {
-      return Vanadium.validators_types['is_empty'].test(v) || (!isNaN(v) && !/^\s+$/.test(v));
+      return Vanadium.validators_types['empty'].test(v) || (!isNaN(v) && !/^\s+$/.test(v));
+    }, 'Please enter a valid number in this field.'],
+    //
+    ['float', function(v) {
+      return Vanadium.validators_types['empty'].test(v) || (!isNaN(v) && !/^\s+$/.test(v));
     }, 'Please enter a valid number in this field.'],
     //
     ['digits', function(v) {
-      return Vanadium.validators_types['is_empty'].test(v) || !/[^\d]/.test(v);
+      return Vanadium.validators_types['empty'].test(v) || !/[^\d]/.test(v);
     }, 'Please use numbers only in this field. please avoid spaces or other characters such as dots or commas.'],
     //
     ['alpha', function (v) {
-      return Vanadium.validators_types['is_empty'].test(v) || /^[a-zA-Z\u00C0-\u00FF\u0100-\u017E\u0391-\u03D6]+$/.test(v)   //% C0 - FF (Ë - Ø); 100 - 17E (? - ?); 391 - 3D6 (? - ?)
+      return Vanadium.validators_types['empty'].test(v) || /^[a-zA-Z\u00C0-\u00FF\u0100-\u017E\u0391-\u03D6]+$/.test(v)   //% C0 - FF (Ë - Ø); 100 - 17E (? - ?); 391 - 3D6 (? - ?)
     }, 'Please use letters only in this field.'],
     //
     ['asciialpha', function (v) {
-      return Vanadium.validators_types['is_empty'].test(v) || /^[a-zA-Z]+$/.test(v)   //% C0 - FF (Ë - Ø); 100 - 17E (? - ?); 391 - 3D6 (? - ?)
+      return Vanadium.validators_types['empty'].test(v) || /^[a-zA-Z]+$/.test(v)   //% C0 - FF (Ë - Ø); 100 - 17E (? - ?); 391 - 3D6 (? - ?)
     }, 'Please use ASCII letters only (a-z) in this field.'],
     ['alphanum', function(v) {
-      return Vanadium.validators_types['is_empty'].test(v) || !/\W/.test(v)
+      return Vanadium.validators_types['empty'].test(v) || !/\W/.test(v)
     }, 'Please use only letters (a-z) or numbers (0-9) only in this field. No spaces or other characters are allowed.'],
     //
     ['date', function(v) {
       var test = new Date(v);
-      return Vanadium.validators_types['is_empty'].test(v) || !isNaN(test);
+      return Vanadium.validators_types['empty'].test(v) || !isNaN(test);
     }, 'Please enter a valid date.'],
     //
     ['email', function (v) {
-      return (Vanadium.validators_types['is_empty'].test(v)
+      return (Vanadium.validators_types['empty'].test(v)
               ||
               /\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/.test(v))
     }, 'Please enter a valid email address. For example fred@domain.com .'],
     //
     ['url', function (v) {
-      return Vanadium.validators_types['is_empty'].test(v) || /^(http|https|ftp):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i.test(v)
+      return Vanadium.validators_types['empty'].test(v) || /^(http|https|ftp):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i.test(v)
     }, 'Please enter a valid URL.'],
     //
     ['date_au', function(v) {
-      if (Vanadium.validators_types['is_empty'].test(v)) return true;
+      if (Vanadium.validators_types['empty'].test(v)) return true;
       var regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
       if (!regex.test(v)) return false;
       var d = new Date(v.replace(regex, '$2/$1/$3'));
@@ -132,11 +142,11 @@ Vanadium.setupValidatorTypes = function() {
       // [$]1###+[.##]
       // [$]0.##
       // [$].##
-      return Vanadium.validators_types['is_empty'].test(v) || /^\$?\-?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(v)
+      return Vanadium.validators_types['empty'].test(v) || /^\$?\-?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}\d*(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(v)
     }, 'Please enter a valid $ amount. For example $100.00 .'],
     //
     ['selection', function(v, elm) {
-      return elm.options ? elm.selectedIndex > 0 : !Vanadium.validators_types['is_empty'].test(v);
+      return elm.options ? elm.selectedIndex > 0 : !Vanadium.validators_types['empty'].test(v);
     }, 'Please make a selection'],
     //
     ['one_required',
@@ -146,6 +156,20 @@ Vanadium.setupValidatorTypes = function() {
           return getNodeAttribute(elm, 'value')
         });
       }, 'Please select one of the above options.'],
+    //
+    ['length',
+      function (v, p) {
+        if (p === undefined) {
+          return true
+        } else {
+          return v.length == parseInt(p)
+        }
+        ;
+      },
+      function (_v, p) {
+        return 'The value should be <span class="' + Vanadium.config.message_value_class + '">' + p + '</span> characters long.'
+      }
+    ],
     //
     ['min_length',
       function (v, p) {
@@ -196,7 +220,7 @@ Vanadium.setupValidatorTypes = function() {
     ],
     ['ajax',
       function (v, p, validation_instance, decoration_context, decoration_callback) {
-        if (Vanadium.validators_types['is_empty'].test(v)) return true;
+        if (Vanadium.validators_types['empty'].test(v)) return true;
         if (decoration_context && decoration_callback) {
           $.getJSON(p, {value: v, id: validation_instance.element.id}, function(data) {
             decoration_callback.apply(decoration_context, [[data], true]);
@@ -214,7 +238,7 @@ Vanadium.setupValidatorTypes = function() {
           try
           {
             var exp = new RegExp(pattern, attributes);
-            return Vanadium.validators_types['is_empty'].test(v) || (exp.test(v));
+            return exp.test(v);
           }
           catch(err)
           {
@@ -227,9 +251,9 @@ Vanadium.setupValidatorTypes = function() {
       function (_v, p) {
         var params = p.split('/');
         if (params.length == 3 && params[0] == "") {
-          return 'The value should match be <span class="' + Vanadium.config.message_value_class + '">' + p.toString + '</span> pattern.';
+          return 'The value should match be <span class="' + Vanadium.config.message_value_class + '">' + p.toString() + '</span> pattern.';
         } else {
-          return 'provided parameter <span class="' + Vanadium.config.message_value_class + '">' + p.toString + '</span> is not valid Regexp pattern.';
+          return 'provided parameter <span class="' + Vanadium.config.message_value_class + '">' + p.toString() + '</span> is not valid Regexp pattern.';
         }
       }
     ]
