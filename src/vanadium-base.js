@@ -63,8 +63,10 @@ Vanadium.init = function() {
   this.scan_dom();
 }
 
-Vanadium.addValidatorType = function(className, validationFunction, message, error_message) {
-  this.validators_types[className] = new Vanadium.Type(className, validationFunction, message, error_message);
+
+
+Vanadium.addValidatorType = function(className, validationFunction, error_message, message, init) {
+  this.validators_types[className] = new Vanadium.Type(className, validationFunction, error_message, message, init);
 };
 
 Vanadium.addValidatorTypes = function(validators_args) {

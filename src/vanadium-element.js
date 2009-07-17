@@ -40,6 +40,7 @@ ElementValidation = function(element) {
 ElementValidation.prototype = {
 
   initialize: function(element) {
+    this.virgin = true;
     this.element = element;
     this.validations = [];
     this.only_on_blur = false;
@@ -166,7 +167,8 @@ ElementValidation.prototype = {
     // so we won't get the result imediately. In that case the provided decoration callback
     // will be invoked on return from asynchronous callback
     // It is used by Ajax based server-side validation
-    this.decorate(this.validate(this, this.decorate));
+    if(!this.virgin)
+      this.decorate(this.validate(this, this.decorate));
   },
   create_advice: function(validation_result) {
     var span = document.createElement("span");
@@ -178,9 +180,9 @@ ElementValidation.prototype = {
   },
   reset: function() {
     this.invalid = undefined; //mark this validation element as undefined
-//    this.element_containers().each(function(_element, container) {
-//      container.decorate();
-//    });
+    //    this.element_containers().each(function(_element, container) {
+    //      container.decorate();
+    //    });
     var element_advice = document.getElementById(this.advice_id);
     if (element_advice) {
       if ($(element_advice).hasClass(Vanadium.empty_advice_marker_class)) {
@@ -218,7 +220,7 @@ ElementValidation.prototype = {
     var self = this;
     if (self.timeout) clearTimeout(self.timeout);
     self.timeout = setTimeout(function() {
-      self.validateAndDecorate();
+      $(self.element).trigger('validate');
     }, self.wait);
   },
   deferReset: function() {
@@ -236,48 +238,61 @@ ElementValidation.prototype = {
 
     this.element_containers();
 
-
-    //proxy('onfocus', function() {
-    //TODO make doONFocus self.doOnFocus(e);
-    //});
     if (!this.only_on_submit) {
-      switch (this.elementType) {
-        case Vanadium.CHECKBOX:
-          $(self.element).click(function() {
-            self.validateAndDecorate();
-          });
-          break;
-        //TODO check if checkboxes support on-change too. and if yes handle it!
-        // let it run into the next to add a change event too
-        case Vanadium.SELECT:
-        case Vanadium.FILE:
-          $(self.element).change(function() {
-            self.validateAndDecorate();
-          });
-          break;
-        default:
-          $(self.element).keydown(function(e) {
+      this.observe();
+      $(self.element).bind('validate', function() {
+        self.validateAndDecorate.call(self)
+      });
+      $(self.element).bind('defer_validation', function() {
+        self.deferValidation.call(self)
+      });
+      $(self.element).bind('reset', function() {
+        self.reset.call(self)
+      });
+    }
+
+  },
+  observe: function() {
+    var element = this.element;
+    var elementType = Vanadium.getElementType(element);
+    var self = this;
+    $(element).focus(function() {
+      self.virgin = false;
+    });
+    switch (elementType) {
+      case Vanadium.CHECKBOX:
+        $(element).click(function() {
+          //TODO check db click !!!
+          $(self.element).trigger('validate');
+        });
+        break;
+      //TODO check if checkboxes support on-change too. and if yes handle it!
+      // let it run into the next to add a change event too
+      case Vanadium.SELECT:
+      case Vanadium.FILE:
+        $(element).change(function() {
+          $(element).trigger('validate');
+        });
+        break;
+      default:
+        $(element).keydown(function(e) {
+          if (e.keyCode != 9) {//no tabulation as it changes focus
+            $(element).trigger('reset');
+          }
+          ;
+        });
+
+        if (!this.only_on_blur) {
+          $(element).keyup(function(e) {
             if (e.keyCode != 9) {//no tabulation as it changes focus
-              //self.deferReset();
-              self.reset();
+              $(element).trigger('defer_validation');
             }
             ;
           });
-
-          if (!this.only_on_blur) {
-            $(self.element).keyup(function(e) {
-              if (e.keyCode != 9) {//no tabulation as it changes focus
-                self.deferValidation();
-              }
-              ;
-            });
-          };
-          $(self.element).blur(function() {
-            self.validateAndDecorate();
-          });
-      }
-      ;
+        };
+        $(element).blur(function() {
+          $(element).trigger('validate');
+        });
     }
-    ;
   }
 };

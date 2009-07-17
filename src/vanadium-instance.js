@@ -49,12 +49,15 @@ Validation.prototype = {
     if (advice) {
       $(advice).addClass(Vanadium.config.advice_class);
     }
+    if(this.validation_type.init){//Vanadium.isFunction(this.validation_type.init)){
+      this.validation_type.init(this); //this give us oportunity to define in validation_type scope activity which will be performed on its instance initialisation
+    }
   },
   emmit_message: function(message) {
     if (typeof(message) === "string") {
       return message;
     } else if (typeof(message) === "function") {
-      return message.call(this, this.element.value, this.param);
+      return message.call(this, $(this.element).val(), this.param);
     }
   },
   validMessage: function() {

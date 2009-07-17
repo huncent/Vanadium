@@ -34,15 +34,16 @@
  @end
  =====================================================================
  */
-Vanadium.Type = function(className, validationFunction, error_message, message) {
-  this.initialize(className, validationFunction, error_message, message);
+Vanadium.Type = function(className, validationFunction, error_message, message, init) {
+  this.initialize(className, validationFunction, error_message, message, init);
 };
 Vanadium.Type.prototype = {
-  initialize: function(className, validationFunction, error_message, message) {
+  initialize: function(className, validationFunction, error_message, message, init) {
     this.className = className;
     this.message = message;
     this.error_message = error_message;
     this.validationFunction = validationFunction;
+    this.init = init;
   },
   test: function(value) {
     return this.validationFunction.call(this, value);
@@ -55,6 +56,11 @@ Vanadium.Type.prototype = {
   },
   toString: function() {
     return "className:" + this.className + " message:" + this.message + " error_message:" + this.error_message
+  },
+  init: function(parameter) {
+    if (this.init) {
+      this.init(parameter);
+    }
   }
 };
 
@@ -216,6 +222,15 @@ Vanadium.setupValidatorTypes = function() {
           return 'The value should be the same as <span class="' + Vanadium.config.message_value_class + '">' + ($(exemplar).attr('name') || exemplar.id) + '</span> .';
         else
           return 'There is no exemplar item!!!'
+      },
+      "",
+      function(validation_instance) {
+        var exemplar = document.getElementById(validation_instance.param);
+        if (exemplar){
+          $(exemplar).bind('validate', function(){
+            $(validation_instance.element).trigger('validate');
+          });
+        }
       }
     ],
     ['ajax',

@@ -43,6 +43,10 @@ Vanadium.isArray = function(object) {
 
 }
 
+Vanadium.isFunction = function(object) {
+  return object != null && object.toString() === "[object Function]";
+}
+
 Vanadium.extend = function(extension) {
   var args = [Vanadium];
   for (var idx = 0; idx < arguments.length; idx++) {
