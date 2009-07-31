@@ -94,7 +94,7 @@ Vanadium.setupValidatorTypes = function() {
     ['integer', function(v) {
       if (Vanadium.validators_types['empty'].test(v)) return true;
       var f = parseFloat(v);
-      return (!isNaN(f) && f.toString == v && Math.round(f) == f);
+      return (!isNaN(f) && f.toString() == v && Math.round(f) == f);
     }, 'Please enter a valid integer in this field.'],
     //
     ['number', function(v) {
