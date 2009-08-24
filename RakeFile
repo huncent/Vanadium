@@ -35,12 +35,11 @@ task :dist => :minify do
   puts 'Packaging distribution...'
   FileUtils.cp Dir[DOC + '/**/*'], DIST
   FileUtils.cp 'README', DIST
-  Zip::ZipFile.open(DIST + "/vanadium.zip", Zip::ZipFile::CREATE) do |zip|
-    DIST_LIST.each do |f|
-      zip.get_output_stream(File.basename(f)) { |o| o << File.open(f).read } if File.exists? f
-    end
-  end
-  
+  #Zip::ZipFile.open(DIST + "/vanadium.zip", Zip::ZipFile::CREATE) do |zip|
+  #  DIST_LIST.each do |f|
+  #    zip.get_output_stream(File.basename(f)) { |o| o << File.open(f).read } if File.exists? f
+  #  end
+  #end
 end
 
 desc 'Delete all files from dist.'
