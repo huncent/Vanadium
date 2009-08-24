@@ -263,6 +263,7 @@ ElementValidation.prototype = {
       case Vanadium.CHECKBOX:
         $(element).click(function() {
           //TODO check db click !!!
+          self.virgin = false; //this is here 'cos safari do not focus on checkboxes
           $(self.element).trigger('validate');
         });
         break;
