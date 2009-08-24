@@ -1,0 +1,54 @@
+Vanadium - Unobtrusive, Declarative, Server-side Technology Agnostic,
+Ajax Enabled, Server-side Aware, Client-side Validation
+-------------------------------------------------------
+
+Version: 0.1
+Author: Daniel Kwiecinski (daniel.kwieicnski@lambder.com)
+Project Home: http://lambder.com
+GIT repo: http://github.com/lambder/Vanadium
+
+
+Vanadium is JavaScript validation toolkit that makes client-side validation easy.
+Here's a rundown of the functionality:
+
+* Validation rules are applied to HTML elements by adding special markup classes. E.g. adding ':required' to element's classes
+makes the element being validated against provided value
+* Instead of markup, one can use external definition provided as json structure.
+* It is Ajax enabled in that sense one can declare particular field being validated by the result of the server response.
+E.g. adding ':ajax;/path_on_server/user_exists.json' to element's classes will cause any change to value of that element being
+sent to server as request. The response is expected to be json structure in the form of:
+ {success: (true/false), [message: (MESSAGE_TEXT)], [advice_id: (ID_OF_THE_HTML_ELEMENT_USED_FOR_INJECTING_THE_MESSAGE)]}
+
+
+To have a html form with 4 fields: username, email, password and repeated password.
+Where username is required and has to be at least 5 characters long and unique in the system, email is valid email adders
+password is required and has to be at least 6 character long, repeated password has to be the same as password, then one use
+the following HTML:
+
+
+<input id="name" class=":required :min_length;5 :ajax;http://host.com/user_exists.json" type="text">
+<input id="email" class=":required  :email" type="text">
+<input id="pass" class=":required :min_length;6" type="password">
+<input id="repeat_pass" class=":same_as;pass" type="password">
+
+* The the default (:;) markup prefix and separator can be reconfigured.
+
+* :ajax;http://host.com/user_exists.json in the example is server-side validation which Vanadium uses for checking if given username
+is already taken.
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+Compatible with JQuery 1.3.2
+Tested in: Firefox 3.5 (PC/Mac), Safari 2 (Mac), IE 6+, Opera 9 (PC/Mac)
+
+Please mail any feedback to daniel.kwieicnski@lambder.com
+
+
+
+Acknowledgments / Credits
+-------------------------
+
+.....  to be completed   ......
