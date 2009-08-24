@@ -266,7 +266,7 @@ Vanadium.setupValidatorTypes = function() {
       function (_v, p) {
         var params = p.split('/');
         if (params.length == 3 && params[0] == "") {
-          return 'The value should match be <span class="' + Vanadium.config.message_value_class + '">' + p.toString() + '</span> pattern.';
+          return 'The value should match the <span class="' + Vanadium.config.message_value_class + '">' + p.toString() + '</span> pattern.';
         } else {
           return 'provided parameter <span class="' + Vanadium.config.message_value_class + '">' + p.toString() + '</span> is not valid Regexp pattern.';
         }
